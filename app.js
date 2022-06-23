@@ -2,9 +2,11 @@ let kapi = "28109630-989232fecefc0255158015b51";
 let searchDefault = "sun";
 let body = document.body;
 
+
+
 function search() {
     var inpt = document.getElementById("output")
-    var ipn = (!inpt.value) ? "sun":"bitcoin"//searchDefault : inpt.value.toLowerCase();
+    var ipn = (!inpt.value) ? "sun": inpt.value      //searchDefault : inpt.value.toLowerCase();
     console.log(inpt.value);
   var lang = document.getElementById("lan");
   !lang ? "fr" : lang.value;
@@ -12,35 +14,65 @@ function search() {
     `https://pixabay.com/api/?key=${kapi}&q=${ipn}&image_type=photo&per_page=90&lang=${lang}`
   ).then(function (response) {
     response.json().then(function (pixdata) {
-      //(pixdata)
+      console.log(pixdata);
       divclear()
-      cards(pixdata.hits); // (pixdata.hits)
+      cards(pixdata.hits);
     });
   });
 }
 
+
+
 function nav() {
+    // Variables
     let input = document.createElement("input");
     let app = document.createElement('div')
+    let navbar = document.createElement('div')
+    let p = document.createElement("p")
+
+    // Atributs
     app.setAttribute('id', 'app')
-    input.setAttribute("class", "d-flex justify-content-end");
+    input.setAttribute("class", "col");
     input.setAttribute("id","output")
     input.setAttribute('onkeyup', "search()")
-    body.appendChild(input);
+    navbar.setAttribute("class", "container")
+    p.setAttribute("class","mt-2")
+
+    // Texte
+    p.innerHTML= "Search by Name"
+
+    // AppendChild
+    navbar.appendChild(p)
+    navbar.appendChild(input)
+    // navbar.appendChild(col)
+    body.appendChild(navbar);
     body.appendChild(app)
+
+    // Function
     search()
 }
 nav()
+
+
+
+  // Permet de Rendre les recherches fluides sans laisser les anciennes recherches en bas de page
 function divclear(){
     document.getElementById('app').innerHTML=''
 }
+
+
+  // Creation des Cards selon le nombre d'images et avec l'ajout en dessous du nom de l'artiste et son tag
 function cards(data) {
   //   console.log(data)
+  // Variables
   let row = document.createElement("div");
   let cont = document.createElement("div");
+  
+  // Attributs
   cont.setAttribute("class", "container");
   row.setAttribute("class", "row");
 
+  // Boucle FOR
   for (let i = 0; i < data.length; i++) {
     const img = document.createElement("img");
     let h1 = document.createElement("h1");
@@ -57,10 +89,9 @@ function cards(data) {
     img.setAttribute("class", "card-img-top ");
     div.setAttribute("class", "card ");
     cards.setAttribute("class", "text-center");
-    col.setAttribute("class", "col-md-4");
+    col.setAttribute("class", "col-md-4 mt-3");
     p.setAttribute("class", "card-text");
 
-    // div.style.width = "18rem";
 
     // Textes
     p.innerHTML = `De ${data[i].user} | Tags ${data[i].tags}`;
@@ -74,6 +105,7 @@ function cards(data) {
     row.appendChild(col);
   }
   
+
   cont.appendChild(row);
   var app = document.getElementById('app')
   app.appendChild(cont);
